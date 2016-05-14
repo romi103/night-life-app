@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="http://localhost:5000/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="page-header text-center">
+            <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+            <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+        </div>
+
+        <div class="row">
+
+            <!-- LOCAL INFORMATION -->
+            <div class="col-sm-6">
+                <div class="well">
+                    <h3><span class="fa fa-user"></span> Local</h3>
+
+                    <p>
+                        <strong>id</strong>:
+                        <%= user._id %>
+                            <br>
+                            <strong>email</strong>:
+                            <%= user.local.email %>
+                                <br>
+                                <strong>password</strong>:
+                                <%= user.local.password %>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://localhost:5000/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://localhost:5000/bootstrap.min.js"></script>
+</body>
+
+</html>
