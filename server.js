@@ -8,7 +8,7 @@ var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
-var Chart = require('src/chart.js')
+//var Chart = require('src/chart.js')
 
 
 var morgan = require('morgan');
@@ -17,6 +17,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var configDB = require('./config/database.js');
+
 
 //static contents
 app.use(express.static(__dirname + '/public'));
@@ -29,6 +30,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log("we're connected to database");
 });
+
 //
 require('./config/passport')(passport); // pass passport for configuration
 //
