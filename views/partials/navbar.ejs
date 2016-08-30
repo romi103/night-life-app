@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -20,10 +20,10 @@
 
             <form class="navbar-form navbar-right" role="search">
                 <% if(!userLogged) { %>
-                    <a href="/login" class="btn btn-default mdl-button mdl-js-button mdl-button--raised mdl-button--accent"><span class="fa fa-user"></span> Login</a>
-                    <a href="/signup" class="btn btn-default mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><span class="fa fa-user"></span> Signup</a>
+                    <a href="/login" class="btn btn-default "><span class="fa fa-user"></span> Login</a>
+                    <a href="/signup" class="btn btn-default "><span class="fa fa-user"></span> Signup</a>
                     <% } else if (userLogged) {%>
-                        <a href="/logout" class="btn btn-default mdl-button mdl-js-button mdl-button--raised mdl-button--colored"><span class="fa fa-user"></span> Logout</a>
+                        <a href="/logout" class="btn btn-default"><span class="fa fa-user"></span> Logout</a>
                         <%}%>
             </form>
         </div>

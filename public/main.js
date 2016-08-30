@@ -1,4 +1,6 @@
 //delete poll
+
+
 $(".deletePoll").click(function () {
     var target = $(event.target);
     var $link = $(this).next();
@@ -8,7 +10,7 @@ $(".deletePoll").click(function () {
     var r = confirm("Are you sure you want to remove the poll?");
     if (r == true) {
         $.post("/deletePoll", {pollId: pollId}).done(function (data) {
-            reloadSite();
+            //reloadSite();
 
         });
     }
@@ -16,7 +18,7 @@ $(".deletePoll").click(function () {
 
 
 //accordion - dropdown poll info
-$(".votePoll").click(function () {
+$(".votePoll").click(function (event) {
     var target = $(event.target);
     var $link = $(this).next();
     var pollId = $link.val();
@@ -59,7 +61,7 @@ $("#saveVote").click(function () {
         var vote = $(".voteData").serialize();
         console.log(vote);
         $.post("/votePoll", vote).done(function (data) {
-            reloadSite();
+            //reloadSite();
 
         });
         $('#votePoll').modal('hide');
@@ -214,7 +216,7 @@ $("#saveButton").click(function () {
         $.post("/newpoll", formData).done(function (data) {
             $('#newPollModal').modal('hide');
 
-            reloadSite();
+            //reloadSite();
         });
     } else {
         alert(errorText);
@@ -250,12 +252,12 @@ $('#resetButt').click(function(){
         document.getElementById("createPollForm").reset();
   });
 
-function reloadSite() {
-    $("#siteParent").addClass("loading");
-    $('#siteChild').load(document.URL + "#siteChild", function () {
-        $("#siteParent").removeClass("loading");
-    });
-
-}
+//function reloadSite() {
+//    $("#siteParent").addClass("loading");
+//    $('#siteParent').load(document.URL + "#siteChild" , function () {
+//        $("#siteParent").removeClass("loading");
+//    });
+//
+//}
 
 

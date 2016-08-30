@@ -1,5 +1,5 @@
 body {
-    background-image: url("NH1nLsV.png");
+    background-image: url("congruent_pentagon.png");
 }
 
 .canv {
@@ -45,3 +45,36 @@ body.loading {
 body.loading .loadingModal {
     display: block;
 }
+
+
+.pollsSection {
+    background-color: #b0d5f4;
+    border-radius: 5px;
+        margin-top: 2%;
+    box-shadow: 3px 3px 12px #4a4646;
+    
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    /* border: 1px solid transparent; */
+    /* border-radius: 4px; */
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    /* box-shadow: 0 1px 1px rgba(0,0,0,.05); */
+/*    border-bottom: 4px solid #4CAF50;*/
+}
+
+
+.navbar-default {
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    box-shadow: 2px 0px 12px #4a4646;
+    
+}
+
+.panel-title {
+    font-size: 1.7em;
+}
+
+
