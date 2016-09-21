@@ -8,7 +8,7 @@
     <title>Vote App</title>
     <meta name="description" content="Voting app">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <link rel="stylesheet" href="materialize.min.css">-->
+    <!--    <link rel="stylesheet" href="materialize.min.css">-->
     <link rel="stylesheet" href="bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 
@@ -18,7 +18,7 @@
 
 <body id="siteParent">
     <div id="siteChild">
-   
+
 
         <!-- NEW POLL Modal -->
         <div class="modal fade" id="newPollModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -29,27 +29,40 @@
                         <h4 class="modal-title" id="myModalLabel">Please specify the name of the new poll and number of dataset.</h4>
                     </div>
                     <div id="modalBody" class="modal-body">
+
+
+
                         <form id="createPollForm">
+                            <label for="pollName">Name of poll</label>
                             <div class="form-group">
-                                <input type="text" class="mdl-textfield__input data" id="pollName" name="pollName" placeholder="Name of poll">
+                                <input type="text" class="data" id="pollName" name="pollName" placeholder="Name of poll" size="50">
                             </div>
+                            </br>
+                            <label>Datset</label>
                             <div class="form-group">
-                                <input type="text" class="dataSet data" name="labels">
+                                <input type="text" class="dataSet data" name="labels" size="30">
 
                             </div>
                             <div class="form-group">
-                                <input type="text" class="dataSet data" name="labels">
+                                <input type="text" class="dataSet data" name="labels" size="30">
 
                             </div>
                             <!--       /////////////////////////////////////                 -->
                             <div class="form-group">
-                                <input type="button" id="addDatasetInput" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" value="+">
+                                <input type="button" id="addDatasetInput" class="btn btn-default" value="Add New Fieled">
                             </div>
 
                         </form>
+                    
+                        <div class="alertNewPollValidation">
+                           
+                        </div>
+                    
+
+
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" id="resetButt" class="btn btn-default">Reset</button>
+                        
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button type="button" id="saveButton" class="btn btn-primary">Save</button>
                     </div>
@@ -64,7 +77,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Please specify the name of the new poll and number of dataset.</h4>
+                        <h4 class="modal-title" id="pollNameVote"></h4>
+
                     </div>
                     <div class="modal-body">
                         <form class="voteBody input-field"></form>
@@ -76,80 +90,136 @@
                 </div>
             </div>
         </div>
+
+        <!--  DELETE POLL MODAL   -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="delatePollModal">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <!--
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+-->
+                    <div class="modal-body">
+                        <p>Are you sure you want to remove the poll?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="dismissDeletePoll" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary" id="deletePoll">Yes</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
         <!--  LOAD NAVBAR  -->
         <% include partials/navbar %>
             <!-- END NAVBAR   -->
 
+
             <section class="mainSection" id='outer'>
-
                 <div class="container-fluid" id="inner">
-                    <div class="row">
-                        <!--  all polls  -->
-                        <div class="col-md-8 col-md-offset-2 pollsSection">
-                            <h1>Latest polls</h1>
-                            <!--     ////////////////ACORDION///////////////////////////////ACORDION////////////////////////////////               -->
-                            
-                        
-                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                <% if( typeof poll !== "undefined") { %>
-                                    <% poll.forEach(function (poll){  %>
-                                        <div class="panel">
-                                            <div class="panel-heading" role="tab" id="headingOne">
-                                                <h4 class="panel-title">
-                                    <input type="hidden" value="<%= poll._id %>">
-                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#acordion-<%= poll._id %>" aria-expanded="true" aria-controls="collapseOne">
-            <%= poll.pollName %></a><button class="votePoll btn btn-default pull-right">Vote</button><input type="hidden" value="<%= poll._id %>">
-                                                    
+                    <div>
+                        <!-- Nav tabs -->
+                        <div class="row">
+                            <div class="col-md-4 col-md-offset-4">
+                                <div class="pills-background">
+                                    <ul class="nav nav-pills pills" role="tablist">
+                                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Latest polls</a></li>
+                                        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Your polls</a></li>
 
-                                            </h4>
-                                            </div>
-                                            <div id="acordion-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                                                <canvas id="chart-<%= poll._id %>"></canvas>
-
-                                            </div>
-                                        </div>
-                                        <% }); %>
-                                            <% } %>
+                                    </ul>
+                                </div>
                             </div>
-                           
-
                         </div>
-                        <!--  <!--     ////////////////ACORDION USER///////////////////////////////ACORDION             -->
-                    </div>
-                        <div class='row'>
-                        <div class="col-md-8 col-md-offset-2 pollsSection">
-                            <div class='userPolls'>
 
-                                <h2>Your polls</h2>
-                                <% if(userLogged) { %>
-                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!-- Tab conttent-->
+                        <div class="tab-content">
+                            <!-- Tab conttent latest polls-->
+                            <div role="tabpanel" class="tab-pane active" id="home">
+                                <div class="row">
+                                    <!--  all polls  -->
+                                    <div class="col-md-8 col-md-offset-2 pollsSection">
+                                        <h2>Latest polls</h2>
+                                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                            <% if( typeof poll !== "undefined") { %>
+                                                <% poll.forEach(function (poll){  %>
+                                                    <div class="panel">
+                                                        <div class="panel-heading" role="tab" id="headingOne">
+                                                            <div class="row">
+                                                                <div class="col-sm-9">
+                                                                    <h4 class="panel-title">
+                                                                        <input type="hidden" value="<%= poll._id %>">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#acordion-<%= poll._id %>" aria-expanded="true" aria-controls="collapseOne">
+            <%= poll.pollName %></a>
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="col-sm-3">
+                                                                    <button class="votePoll btn btn-success pull-right"><i class="fa fa-check" aria-hidden="true"></i> Vote</button>
+                                                                    <input type="hidden" value="<%= poll._id %>">
 
-                                        <% if( typeof userPolls !== "undefined") { %>
-                                            <% userPolls.forEach(function (poll){  %>
-                                                <div class="panel">
-                                                    <div class="panel-heading" role="tab" id="headingOne">
-                                                        <h4 class="panel-title">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="acordion-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                            <canvas id="chart-<%= poll._id %>"></canvas>
+
+                                                        </div>
+                                                    </div>
+                                                    <% }); %>
+                                                        <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab conttent user polls-->
+                            <div role="tabpanel" class="tab-pane" id="profile">
+
+                                <div class='row'>
+                                    <div class="col-md-8 col-md-offset-2 pollsSection">
+                                        <div class='userPolls'>
+
+                                            <h2>Your polls</h2>
+                                            <% if(userLogged) { %>
+                                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                                    <% if( typeof userPolls !== "undefined") { %>
+                                                        <% userPolls.forEach(function (poll){  %>
+                                                            <div class="panel">
+                                                                <div class="panel-heading" role="tab" id="headingOne">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-8">
+                                                                            <h4 class="panel-title">
                                     <input type="hidden" value="<%= poll._id %>">
                                     <a role="button" class="userPolls" data-toggle="collapse" data-parent="#accordion" href="#acordion-user-<%= poll._id %>" aria-expanded="true" aria-controls="collapseOne">
             <%= poll.pollName %></a>
-                <button class="votePoll btn btn-default pull-right">Vote</button><input type="hidden" value="<%= poll._id %>">
-                <button class="deletePoll btn btn-default pull-right">Delete</button><input type="hidden" value="<%= poll._id %>">
-                                </h4>
-                                                    </div>
-                                                    <div id="acordion-user-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                                                        <canvas id="chart-user-<%= poll._id %>" width="200" height="200"></canvas>
-
-                                                    </div>
-
+                                                                         </h4>
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                                            <button class="votePoll btn btn-success pull-right"><i class="fa fa-check" aria-hidden="true"></i> Vote</button>
+                                                                            <input type="hidden" value="<%= poll._id %>">
+                                                                            <button class="deletePoll btn btn-danger pull-right"><i class="fa fa-times" aria-hidden="true"></i> Delete</button>
+                                                                            <input type="hidden" value="<%= poll._id %>">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div id="acordion-user-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                                    <canvas id="chart-user-<%= poll._id %>"></canvas>
+                                                                </div>
+                                                            </div>
+                                                            <% }); %>
+                                                                <% } %>
                                                 </div>
-                                                <% }); %>
-                                                    <% } %>
+                                                <button id="addNewPoll" class="btn btn-default center-block"><i class="fa fa-plus" aria-hidden="true"></i> New Poll</button>
+                                                <% } else { %>
+                                                    <% include partials/userLoggedOut %>
+                                                        <% } %>
+                                        </div>
                                     </div>
-                                    <button id="addNewPoll" class="btn btn-default mdl-button mdl-js-button mdl-button--raised mdl-button--accent"> New Poll</button>
-                                    <% } else { %>
-                                        <% include partials/userLoggedOut %>
-
-                                            <% } %>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,14 +229,14 @@
             <!--  template for handelbar, draws tabel with the latest polls  -->
 
             <div class="loadingModal"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
-                <span class="sr-only">Loading...</span>
+                <!--                <span class="sr-only">Loading...</span>-->
             </div>
             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
             <script src="jquery.min.js"></script>
             <!-- Latest compiled and minified JavaScript -->
             <script src="bootstrap.min.js"></script>
             <script src="randomColor.js"></script>
-<!--            <script src="materialize.min.js"></script>-->
+            <!--            <script src="materialize.min.js"></script>-->
             <script src="handlebars-v4.0.5.js"></script>
             <script src="main.js"></script>
     </div>

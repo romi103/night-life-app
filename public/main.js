@@ -1,20 +1,29 @@
 //delete poll
-
-
 $(".deletePoll").click(function () {
     var target = $(event.target);
     var $link = $(this).next();
     var pollId = $link.val();
-    console.log(pollId);
 
-    var r = confirm("Are you sure you want to remove the poll?");
-    if (r == true) {
-        $.post("/deletePoll", {pollId: pollId}).done(function (data) {
-            //reloadSite();
+    $('#delatePollModal').modal({
+        keyboard: false
+    });
+    $("#deletePoll").on("click", function () {
 
+        $.post("/deletePoll", {
+            pollId: pollId
+        }).done(function (data) {
+            $('#delatePollModal').modal('hide');
+            reloadSite();
         });
-    }
+    });
+
+    $("#dismissDeletePoll").on("click", function () {
+        $('#delatePollModal').modal('hide');
+        $("#dismissDeletePoll").off();
+    });
 });
+
+
 
 
 //accordion - dropdown poll info
@@ -33,17 +42,22 @@ $(".votePoll").click(function (event) {
 
 
         //accordionBody.append(el_html);//call to mustah template
+
         var arrLabels = poll[0].labels;
+        var pollName = poll[0].pollName;
+        
         var radioForm = $(document.createElement("form"))
             //radioForm.setAttribute("class", "pollOption");
         arrLabels.forEach(function (element, index, array) {
-            radioForm.append("<input type='radio' name='votaData' class='voteData' value='" + element + "'>" + element + "<br>");
+            radioForm.append("<input type='radio' name='votaData' class='voteData' value='" + element + "'>  " + element + "<br>");
 
         });
         $(".voteBody").empty();
+        $("#pollNameVote").empty();
         $('#saveVote').next().remove();
         $(".voteFooter").append("<input type='hidden' class='voteData' name='votedPollId' value=" + poll[0]._id + ">");
         $(".voteBody").append(radioForm);
+        $("#pollNameVote").append(pollName);
 
     });
 
@@ -59,16 +73,16 @@ $("#saveVote").click(function () {
 
     if ($('input[class="voteData"]:checked').length > 0) {
         var vote = $(".voteData").serialize();
-        console.log(vote);
+        
+        $(".loadingModal").prepend("<h3 class='alert alert-info alertPollSubmit'>Thank you for your vote.</h3>");
         $.post("/votePoll", vote).done(function (data) {
-            //reloadSite();
+            reloadSite();
 
         });
         $('#votePoll').modal('hide');
     } else {
-        alert("Select option you want to vote on!");
+        $(".voteBody ").append('<div class="alert alert-warning alert-dismissible alertNewPollValidation" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Warning!</strong> Select option you want to vote on!</div>');
     }
-
 });
 
 
@@ -101,9 +115,9 @@ $('.panel-title').on('click', function (event) {
                     "display": "none"
                 });
 
-//                var source = $("#entry-template").html();
-//                var template = Handlebars.compile(source);
-//                var el_html = template(poll);
+                //                var source = $("#entry-template").html();
+                //                var template = Handlebars.compile(source);
+                //                var el_html = template(poll);
 
 
                 //accordionBody.append(el_html);//call to mustah template
@@ -185,7 +199,7 @@ $("#saveButton").click(function () {
 
     if (!$("#pollName").val()) {
         noPollName = true;
-        errorText = "Poll name is empty";
+        errorText = "Poll name is empty.";
     }
 
     $dataSet.each(function (index) {
@@ -193,7 +207,7 @@ $("#saveButton").click(function () {
         if ($(this).val()) {
             arrayDataSet.push($(this).val());
         } else {
-            errorText = errorText + "\nThere is an empty string";
+            errorText = errorText + "\nThere is an empty string.";
             emptyString = true;
         }
 
@@ -210,16 +224,18 @@ $("#saveButton").click(function () {
     }
 
     if (!sameInputs && !emptyString && !noPollName) {
-        alert("Thank you for submitting the poll");
+
+        $(".loadingModal").prepend("<h3 class='alert alert-info alertPollSubmit'>Thank you for submitting the poll</h3>");
         var formData = $(".data").serialize();
 
         $.post("/newpoll", formData).done(function (data) {
             $('#newPollModal').modal('hide');
 
-            //reloadSite();
+            reloadSite();
         });
     } else {
-        alert(errorText);
+        $(".alertNewPollValidation").empty();
+        $(".alertNewPollValidation").append('<div class="alert alert-warning alert-dismissible alertNewPollValidation" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Warning!</strong> ' + errorText + '</div>');
     }
 
 });
@@ -237,7 +253,7 @@ $('#addNewPoll').click(function () {
 
     //adding input to the poll modal
     $("#addDatasetInput").click(function () {
-        var newInput = $(this).before('<div class="form-group"><input type="text" class="dataSet data" name="labels"><button type="button" class="close removeInput" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>').end();
+        var newInput = $(this).before('<div class="form-group"><input type="text" class="dataSet data" name="labels" size="30"><button type="button" class="close removeInput" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>').end();
 
         $('.removeInput').click(function (e) {
             var targetDiv = $(e.target).parent().parent();
@@ -248,16 +264,18 @@ $('#addNewPoll').click(function () {
 });
 
 //rest new poll form
-$('#resetButt').click(function(){
-        document.getElementById("createPollForm").reset();
-  });
+$('#resetButt').click(function () {
+    document.getElementById("createPollForm").reset();
 
-//function reloadSite() {
-//    $("#siteParent").addClass("loading");
-//    $('#siteParent').load(document.URL + "#siteChild" , function () {
-//        $("#siteParent").removeClass("loading");
-//    });
-//
-//}
+});
+
+function reloadSite() {
+    $("#siteParent").addClass("loading");
+    setTimeout(function () {
+        window.location.href = '/';
+        window.location.reload();
+    }, 1500);
 
 
+
+}

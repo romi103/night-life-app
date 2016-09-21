@@ -1,0 +1,75 @@
+<section class="mainSection" id='outer'>
+
+                <div class="container-fluid" id="inner">
+                    <div class="row">
+                        <!--  all polls  -->
+                        <div class="col-md-8 col-md-offset-2 pollsSection">
+                            <h1>Latest polls</h1>
+                            <!--     ////////////////ACORDION///////////////////////////////ACORDION////////////////////////////////               -->
+                            
+                        
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                <% if( typeof poll !== "undefined") { %>
+                                    <% poll.forEach(function (poll){  %>
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                    <input type="hidden" value="<%= poll._id %>">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#acordion-<%= poll._id %>" aria-expanded="true" aria-controls="collapseOne">
+            <%= poll.pollName %></a><button class="votePoll btn btn-default pull-right">Vote</button><input type="hidden" value="<%= poll._id %>">
+                                                    
+
+                                            </h4>
+                                            </div>
+                                            <div id="acordion-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                <canvas id="chart-<%= poll._id %>"></canvas>
+
+                                            </div>
+                                        </div>
+                                        <% }); %>
+                                            <% } %>
+                            </div>
+                           
+
+                        </div>
+                        <!--  <!--     ////////////////ACORDION USER///////////////////////////////ACORDION             -->
+                    </div>
+                        <div class='row'>
+                        <div class="col-md-8 col-md-offset-2 pollsSection">
+                            <div class='userPolls'>
+
+                                <h2>Your polls</h2>
+                                <% if(userLogged) { %>
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                                        <% if( typeof userPolls !== "undefined") { %>
+                                            <% userPolls.forEach(function (poll){  %>
+                                                <div class="panel">
+                                                    <div class="panel-heading" role="tab" id="headingOne">
+                                                        <h4 class="panel-title">
+                                    <input type="hidden" value="<%= poll._id %>">
+                                    <a role="button" class="userPolls" data-toggle="collapse" data-parent="#accordion" href="#acordion-user-<%= poll._id %>" aria-expanded="true" aria-controls="collapseOne">
+            <%= poll.pollName %></a>
+                <button class="votePoll btn btn-default pull-right">Vote</button><input type="hidden" value="<%= poll._id %>">
+                <button class="deletePoll btn btn-default pull-right">Delete</button><input type="hidden" value="<%= poll._id %>">
+                                </h4>
+                                                    </div>
+                                                    <div id="acordion-user-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                        <canvas id="chart-user-<%= poll._id %>" width="200" height="200"></canvas>
+
+                                                    </div>
+
+                                                </div>
+                                                <% }); %>
+                                                    <% } %>
+                                    </div>
+                                    <button id="addNewPoll" class="btn btn-default mdl-button mdl-js-button mdl-button--raised mdl-button--accent"> New Poll</button>
+                                    <% } else { %>
+                                        <% include partials/userLoggedOut %>
+
+                                            <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>

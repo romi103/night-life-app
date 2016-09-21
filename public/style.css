@@ -1,5 +1,5 @@
 body {
-    background-image: url("congruent_pentagon.png");
+    background-image: url("escheresque.png");
 }
 
 .canv {
@@ -11,9 +11,7 @@ iframe {
     border: none;
 }
 
-.userPolls {
-    text-align: center;
-}
+
 
 .removeInput {
     float: none;
@@ -36,9 +34,18 @@ body.loading {
 }
 
 .loadingModal i {
-    position: relative;
-    left: 50%;
+    position: absolute;
+    left: 48%;
     top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.alertPollSubmit {
+position: absolute;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+    
 }
 
 
@@ -48,7 +55,7 @@ body.loading .loadingModal {
 
 
 .pollsSection {
-    background-color: #b0d5f4;
+    background-color: #6485a8;
     border-radius: 5px;
         margin-top: 2%;
     box-shadow: 3px 3px 12px #4a4646;
@@ -77,4 +84,79 @@ body.loading .loadingModal {
     font-size: 1.7em;
 }
 
+.votePoll {
+    margin-left: 0.8em;
+}
 
+.deletePoll, .votePoll {
+    background-color: 
+}
+
+.pills {
+    margin: 0 auto;
+    max-width: 257px;
+
+}
+
+#addNewPoll {
+    
+}
+
+.userPolls {
+    padding-bottom: 1em;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    color: #fff;
+    background-color: #6485A8;
+    box-shadow: 3px 3px 12px #4a4646;
+    font-size: 20px;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    text-decoration: none;
+    background-color:  rgba(255, 255, 255, 0);
+    box-shadow: 3px 3px 12px #4a4646;
+    color: #337ab7;
+    
+}
+
+.userPolls h2, .pollsSection h2, .userPolls h3  {
+    color: #fff;
+    text-align: center;
+}
+
+#userPollsLogButton {
+    max-width: 200px;
+    margin: 0 auto;
+
+}
+
+#logo {
+    padding: 8px 8px;
+}
+
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 15px 4px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.pills-background {
+        padding: 15px 15px;
+    
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.pills a {
+    margin: 0 1.5px;
+}
+
+#delatePollModal .modal-footer {
+    padding: 15px;
+    text-align: center;
+    border-top: none;
+}
