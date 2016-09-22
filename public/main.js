@@ -111,9 +111,9 @@ $('.panel-title').on('click', function (event) {
 
 
             $.get('/getpoll/' + pollId + "", function (poll) {
-                $('#some').css({
-                    "display": "none"
-                });
+//                $('#some').css({
+//                    "display": "none"
+//                });
 
                 //                var source = $("#entry-template").html();
                 //                var template = Handlebars.compile(source);
@@ -126,7 +126,24 @@ $('.panel-title').on('click', function (event) {
                 var pollName = poll[0].pollName;
 
                 //draws 
-                drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
+                
+                
+                var isPollData = false;
+                
+                arrDataset.forEach(function(i){
+                    if (i > 0) {
+                        isPollData = true;
+                    }
+                });
+                
+                if (isPollData) {
+                    drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
+                } else {
+                    accordionBody.empty();
+                    accordionBody.append("<div style='height: 150px'><p>text test</p></div>");
+                }
+                
+                
 
             });
         }
@@ -165,7 +182,7 @@ function drawPoll(arrlabels, arrDataset, pollName, ctx) {
                 fontSize: 18
             },
             title: {
-                display: true,
+                display: false,
                 text: pollName,
                 fontSize: 24
             },
