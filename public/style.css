@@ -121,7 +121,7 @@ body.loading .loadingModal {
     
 }
 
-.userPolls h2, .pollsSection h2, .userPolls h3  {
+.userPolls h2, .pollsSection h2, .noPollText, .signUpText {
     color: #fff;
     text-align: center;
 }
@@ -155,8 +155,32 @@ body.loading .loadingModal {
     margin: 0 1.5px;
 }
 
-#delatePollModal .modal-footer {
+#delatePollModal {
     padding: 15px;
     text-align: center;
+   
+}
+
+#delatePollModal .modal-footer {
     border-top: none;
+}
+
+
+
+.noOneVoteInfo {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.loginSignupBox {
+    color: #fff;
+    font-weight: 500;
+    margin-top: 50px;
+}
+
+
+.loginSignupBox a {
+    color: #fff;
+    text-decoration: underline;
 }

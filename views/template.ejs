@@ -17,6 +17,7 @@
 </head>
 
 <body id="siteParent">
+    <script>document.body.style.display = "none";</script>
     <div id="siteChild">
 
 
@@ -103,6 +104,7 @@
 -->
                     <div class="modal-body">
                         <p>Are you sure you want to remove the poll?</p>
+                        <p class="romovedPollName"><strong></strong></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" id="dismissDeletePoll" data-dismiss="modal">No</button>
@@ -128,7 +130,7 @@
                             <div class="col-md-4 col-md-offset-4">
                                 <div class="pills-background">
                                     <ul class="nav nav-pills pills" role="tablist">
-                                        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Latest polls</a></li>
+                                        <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Latest polls</a></li>
                                         <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Your polls</a></li>
 
                                     </ul>
@@ -164,7 +166,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div id="acordion-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                        <div id="acordion-<%= poll._id %>" class="panel-collapse collapse pollBody" role="tabpanel" aria-labelledby="headingOne">
                                                             <canvas id="chart-<%= poll._id %>"></canvas>
 
                                                         </div>
@@ -188,6 +190,7 @@
                                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                                     <% if( typeof userPolls !== "undefined") { %>
                                                         <% userPolls.forEach(function (poll){  %>
+                                                    
                                                             <div class="panel">
                                                                 <div class="panel-heading" role="tab" id="headingOne">
                                                                     <div class="row">
@@ -206,12 +209,28 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div id="acordion-user-<%= poll._id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                                                <div id="acordion-user-<%= poll._id %>" class="panel-collapse collapse pollBody" role="tabpanel" aria-labelledby="headingOne">
+                                                                    
+<!--
+                                                                    <div class="bodyLoader">
+                                                                     <div class="loadingModal"><i class="fa fa-spinner fa-pulse fa-4x fa-fw"></i>
+                                <span class="sr-only">Loading...</span>
+            </div>
+                                                                    
+                                                                    </div>
+-->
+                                                                    
                                                                     <canvas id="chart-user-<%= poll._id %>"></canvas>
                                                                 </div>
                                                             </div>
                                                             <% }); %>
                                                                 <% } %>
+<!--                       No Polla Alert                             -->
+                                                      <% if(userPolls.length === 0) { %>
+                                                    <h3 class="noPollText">It looks you haven't added any polls.</h3>
+                                                      <% } %>
+                                                    
+                                                   
                                                 </div>
                                                 <button id="addNewPoll" class="btn btn-default center-block"><i class="fa fa-plus" aria-hidden="true"></i> New Poll</button>
                                                 <% } else { %>
@@ -233,12 +252,15 @@
             </div>
             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
             <script src="jquery.min.js"></script>
+    <script src="main.js"></script>
             <!-- Latest compiled and minified JavaScript -->
             <script src="bootstrap.min.js"></script>
             <script src="randomColor.js"></script>
+            <script src="sessionStorage.js"></script>
+    
             <!--            <script src="materialize.min.js"></script>-->
             <script src="handlebars-v4.0.5.js"></script>
-            <script src="main.js"></script>
+            
     </div>
 
 </body>

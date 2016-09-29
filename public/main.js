@@ -1,3 +1,5 @@
+
+
 //delete poll
 $(".deletePoll").click(function () {
     var target = $(event.target);
@@ -7,12 +9,15 @@ $(".deletePoll").click(function () {
     $('#delatePollModal').modal({
         keyboard: false
     });
+
+
     $("#deletePoll").on("click", function () {
 
         $.post("/deletePoll", {
             pollId: pollId
         }).done(function (data) {
             $('#delatePollModal').modal('hide');
+
             reloadSite();
         });
     });
@@ -45,7 +50,7 @@ $(".votePoll").click(function (event) {
 
         var arrLabels = poll[0].labels;
         var pollName = poll[0].pollName;
-        
+
         var radioForm = $(document.createElement("form"))
             //radioForm.setAttribute("class", "pollOption");
         arrLabels.forEach(function (element, index, array) {
@@ -73,7 +78,7 @@ $("#saveVote").click(function () {
 
     if ($('input[class="voteData"]:checked').length > 0) {
         var vote = $(".voteData").serialize();
-        
+
         $(".loadingModal").prepend("<h3 class='alert alert-info alertPollSubmit'>Thank you for your vote.</h3>");
         $.post("/votePoll", vote).done(function (data) {
             reloadSite();
@@ -103,51 +108,83 @@ $('.panel-title').on('click', function (event) {
         var chartCanvas = $("#chart-" + pollId);
     }
 
-    accordionBody.on('show.bs.collapse', function () {
 
+    if (!accordionBody.children().is("iframe")) {
 
-        if (!accordionBody.children().is("iframe")) {
-
-
-
-            $.get('/getpoll/' + pollId + "", function (poll) {
-//                $('#some').css({
-//                    "display": "none"
-//                });
-
-                //                var source = $("#entry-template").html();
-                //                var template = Handlebars.compile(source);
-                //                var el_html = template(poll);
-
-
-                //accordionBody.append(el_html);//call to mustah template
-                var arrLabels = poll[0].labels;
-                var arrDataset = poll[0].dataset;
-                var pollName = poll[0].pollName;
-
-                //draws 
-                
-                
-                var isPollData = false;
-                
-                arrDataset.forEach(function(i){
-                    if (i > 0) {
-                        isPollData = true;
-                    }
-                });
-                
-                if (isPollData) {
-                    drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
-                } else {
-                    accordionBody.empty();
-                    accordionBody.append("<div style='height: 150px'><p>text test</p></div>");
+        $.get('/getpoll/' + pollId + "", function (poll) {
+            //                
+            var arrLabels = poll[0].labels;
+            var arrDataset = poll[0].dataset;
+            var pollName = poll[0].pollName;
+            var isPollData = false;
+           
+            arrDataset.forEach(function (i) {
+                if (i > 0) {
+                    isPollData = true;
                 }
-                
-                
-
             });
-        }
-    });
+
+            if (isPollData) {
+                drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
+            } else {
+                accordionBody.empty();
+                accordionBody.append("<div style='height: 150px' class='noOneVoteInfo'><div class='alert alert-info' role='alert'><h3>Sorry! No one has voted yet.</h3></div></div>");
+            }
+
+        });
+
+    }
+
+    accordionBody.on('show.bs.collapse');
+
+
+
+
+    //    accordionBody.on('show.bs.collapse', function () {
+    //
+    //
+    //        if (!accordionBody.children().is("iframe")) {
+    //
+    //
+    //
+    //            $.get('/getpoll/' + pollId + "", function (poll) {
+    ////                $('#some').css({
+    ////                    "display": "none"
+    ////                });
+    //
+    //                //                var source = $("#entry-template").html();
+    //                //                var template = Handlebars.compile(source);
+    //                //                var el_html = template(poll);
+    //
+    //
+    //                //accordionBody.append(el_html);//call to mustah template
+    //                var arrLabels = poll[0].labels;
+    //                var arrDataset = poll[0].dataset;
+    //                var pollName = poll[0].pollName;
+    //
+    //                //draws 
+    //                
+    //                
+    //                var isPollData = false;
+    //                
+    //                arrDataset.forEach(function(i){
+    //                    if (i > 0) {
+    //                        isPollData = true;
+    //                    }
+    //                });
+    //                
+    //                if (isPollData) {
+    //                    drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
+    //                } else {
+    //                    accordionBody.empty();
+    //                    accordionBody.append("<div style='height: 150px'><p>text test</p></div>");
+    //                }
+    //                
+    //                
+    //
+    //            });
+    //        }
+    //    });
 });
 
 function drawPoll(arrlabels, arrDataset, pollName, ctx) {
@@ -195,7 +232,7 @@ function drawPoll(arrlabels, arrDataset, pollName, ctx) {
     Chart.defaults.global.responsive = true;
 }
 
-$("#accordion").collapse();
+
 $("#saveButton").click(function () {
 
     $("#addDatasetInput").off();

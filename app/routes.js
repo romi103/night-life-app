@@ -3,14 +3,14 @@ module.exports = function (app, passport) {
 
 
     ///////////// /////////////////////////////////TEST/////////////////////////////////////////
-    var validator = require('validator');
+   
     var Polls = require('../app/models/poll'); //poll model
     var Promise = require('mpromise'); //promises module to asynchronouse function
     //if user is logged in req object is passed to from checkIfIsLogged to anonymouse function -> render user's polls otherwise checkIfISLoggedIn renders homepage site
     app.get('/', getPolls, getUserPolls, function (req, res) {
 
         var userLoggedIn = req.isAuthenticated();
-
+        console.log(res.userPolls);
         res.render('template.ejs', {
 
             poll: res.polls,
@@ -33,7 +33,9 @@ module.exports = function (app, passport) {
 
     function getPolls(req, res, next) {
 
-        Polls.find().exec(function (err, polls) {
+        Polls.find().sort({
+            unix: -1
+        }).exec(function (err, polls) {
             res.polls = polls;
 
             next();
@@ -52,7 +54,9 @@ module.exports = function (app, passport) {
         if (req.isAuthenticated()) {
             Polls.find({
                 userId: req.user._id
-            }).exec(function (err, userPolls) {
+            }).sort({
+            unix: -1
+        }).exec(function (err, userPolls) {
 
                 if (userPolls) {
                     res.userPolls = userPolls;
@@ -84,14 +88,10 @@ module.exports = function (app, passport) {
         res.redirect('/');
     }, function (req, res) {
 
-        // if there is no user with that email
-        // create the user
 
         var newPoll = new Polls();
 
-        // set the user's local credentials
-
-
+        
         newPoll.pollName = req.body.pollName;
         newPoll.labels = req.body.labels;
         var arrayLabel = req.body.labels;
@@ -106,6 +106,8 @@ module.exports = function (app, passport) {
         newPoll.dataset = newDataSet;
 
         newPoll.userId = req.user._id;
+        newPoll.unix = Date.now();
+        
 
         // save the user
         newPoll.save();
@@ -178,7 +180,7 @@ module.exports = function (app, passport) {
         var votedPoll = Polls.find({
             "_id": votedPollId
         }).exec(function (err, poll) {
-            //console.log(poll[0].labels.indexOf(votaData));
+          
             votedIndex = poll[0].labels.indexOf(votaData);
             //var changeDataseet = poll[0].dataset[votedIndex];
             var arrrayDataset = poll[0].dataset;
@@ -216,7 +218,7 @@ module.exports = function (app, passport) {
 //        var votedPollId = req.body.votedPollId;
 //        var votaData = req.body.votaData;
 //        var votedIndex;
-        console.log(req.body);
+      
         Polls.find({ "_id" : req.body.pollId }).remove().exec(function(){
             res.end();
         });
@@ -280,18 +282,18 @@ module.exports = function (app, passport) {
     });
 
     ///template(remove once finish bulding template)
-    app.get('/template', function (req, res) {
-
-        // render the page and pass in any flash data if it exists
-        res.render('template.ejs', {
-            user: req.user
-
-        });
-    });
+//    app.get('/template', function (req, res) {
+//
+//        // render the page and pass in any flash data if it exists
+//        res.render('template.ejs', {
+//            user: req.user
+//
+//        });
+//    });
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/profile', // redirect to the secure profile section
+        successRedirect: '/', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));

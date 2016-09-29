@@ -9,7 +9,8 @@ var poll = mongoose.Schema({
 pollName : String,
 labels : [],
 dataset : [],
-userId: String
+userId: String,
+unix: String
 
 });
 
