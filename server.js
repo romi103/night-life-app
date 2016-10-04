@@ -8,7 +8,7 @@ var port = process.env.PORT || 8080;
 var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
- var validator = require('express-validator');
+ 
 //var Chart = require('src/chart.js')
 
 
@@ -39,17 +39,7 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
-app.use(validator({
-  customValidators: {
-     isArray: function(value) {
-        return Array.isArray(value);
-     },
-     moreThanTwoInputs: function(array) {
-        return array.length >= 2;
-     }
-     
-  }
-}));//valiadtion form module
+
 
 app.set('views', './views');
 app.set('view engine', 'ejs'); // set up ejs for templating

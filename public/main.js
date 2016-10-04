@@ -1,6 +1,3 @@
-
-
-//delete poll
 $(".deletePoll").click(function () {
     var target = $(event.target);
     var $link = $(this).next();
@@ -28,29 +25,20 @@ $(".deletePoll").click(function () {
     });
 });
 
-
-
-
 //accordion - dropdown poll info
 $(".votePoll").click(function (event) {
     var target = $(event.target);
     var $link = $(this).next();
     var pollId = $link.val();
 
-
     $('#votePoll').modal({
         keyboard: false
     });
 
-
     $.get('/getpoll/' + pollId + "", function (poll) {
-
-
-        //accordionBody.append(el_html);//call to mustah template
 
         var arrLabels = poll[0].labels;
         var pollName = poll[0].pollName;
-
         var radioForm = $(document.createElement("form"))
             //radioForm.setAttribute("class", "pollOption");
         arrLabels.forEach(function (element, index, array) {
@@ -74,8 +62,6 @@ $("#saveVote").click(function () {
     var $link = $("#saveVote").next();
     var pollId = $link.val();
 
-
-
     if ($('input[class="voteData"]:checked').length > 0) {
         var vote = $(".voteData").serialize();
 
@@ -94,8 +80,6 @@ $("#saveVote").click(function () {
 $('.panel-title').on('click', function (event) {
 
     var target = $(event.target);
-
-
     var $link = $(this).children();
     var pollId = $link.val();
 
@@ -137,54 +121,6 @@ $('.panel-title').on('click', function (event) {
 
     accordionBody.on('show.bs.collapse');
 
-
-
-
-    //    accordionBody.on('show.bs.collapse', function () {
-    //
-    //
-    //        if (!accordionBody.children().is("iframe")) {
-    //
-    //
-    //
-    //            $.get('/getpoll/' + pollId + "", function (poll) {
-    ////                $('#some').css({
-    ////                    "display": "none"
-    ////                });
-    //
-    //                //                var source = $("#entry-template").html();
-    //                //                var template = Handlebars.compile(source);
-    //                //                var el_html = template(poll);
-    //
-    //
-    //                //accordionBody.append(el_html);//call to mustah template
-    //                var arrLabels = poll[0].labels;
-    //                var arrDataset = poll[0].dataset;
-    //                var pollName = poll[0].pollName;
-    //
-    //                //draws 
-    //                
-    //                
-    //                var isPollData = false;
-    //                
-    //                arrDataset.forEach(function(i){
-    //                    if (i > 0) {
-    //                        isPollData = true;
-    //                    }
-    //                });
-    //                
-    //                if (isPollData) {
-    //                    drawPoll(arrLabels, arrDataset, pollName, chartCanvas);
-    //                } else {
-    //                    accordionBody.empty();
-    //                    accordionBody.append("<div style='height: 150px'><p>text test</p></div>");
-    //                }
-    //                
-    //                
-    //
-    //            });
-    //        }
-    //    });
 });
 
 function drawPoll(arrlabels, arrDataset, pollName, ctx) {
@@ -200,9 +136,6 @@ function drawPoll(arrlabels, arrDataset, pollName, ctx) {
         labels: arrlabels
     }
 
-
-
-    //var ctx = document.getElementById("myChart");
     if (myChart) {
         myChart.destroy();
     }
@@ -237,8 +170,6 @@ $("#saveButton").click(function () {
 
     $("#addDatasetInput").off();
 
-    // $('#newPollModal').modal('hide');
-
     var $pollNameValue = $('#pollName').val();
     var $dataSet = $('.dataSet');
 
@@ -249,7 +180,6 @@ $("#saveButton").click(function () {
     var sameInputs;
     var noPollName;
     var errorText = "";
-
 
     if (!$("#pollName").val()) {
         noPollName = true;
@@ -294,16 +224,13 @@ $("#saveButton").click(function () {
 
 });
 
-
 //modal functionality
 $('#addNewPoll').click(function () {
     $('#newPollModal').modal({
         keyboard: false
     });
 
-
     var modalBody = document.getElementById('modalBody');
-
 
     //adding input to the poll modal
     $("#addDatasetInput").click(function () {
@@ -329,7 +256,5 @@ function reloadSite() {
         window.location.href = '/';
         window.location.reload();
     }, 1500);
-
-
 
 }
