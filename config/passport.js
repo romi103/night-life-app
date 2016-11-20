@@ -54,7 +54,7 @@ module.exports = function(passport) {
 
             // check to see if theres already a user with that email
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('signupAlertMessage', 'That email is already taken.'));
             } else {
 
                 // if there is no user with that email
@@ -69,7 +69,7 @@ module.exports = function(passport) {
                 newUser.save(function(err) {
                     if (err)
                         throw err;
-                    return done(null, newUser);
+                    return done(null, newUser, req.flash('signupAlertMessage', 'You can now sign in with your email.'));
                 });
             }
 

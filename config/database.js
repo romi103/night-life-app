@@ -1,6 +1,6 @@
 
 //var link = process.env.MONGODB_URI;
-var link = "mongodb://heroku_tq5jcl24:pg0nuc71bemtv3n5k3fpb2a12f@ds013310.mlab.com:13310/heroku_tq5jcl24";
+var link = "mongodb://heroku_430x44d0:qivabpvs4lj1cc6gk73sh5gv8f@ds057806.mlab.com:57806/heroku_430x44d0";
 
 module.exports = {
     url: link

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include partials/head %>
+</head>
+
+<body>
+
+    <% include partials/navbar %>
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="search-container col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+
+                        <h3>Sign in with email address here:</h3>
+
+
+                        <form action="email-signin" method="post" class="form-horizontal col-xs-12 col-md-8 col-md-offset-2 email-forms">
+                            <!--             display massage after succesful signing up            -->
+                            <% if( signupAlertMessage.length > 0 ) { %>
+                                <div class="alert alert-success" role="alert">
+                                    <%= signupAlertMessage %>
+                                </div>
+                                <% } %>
+                            
+                            
+                            <!--             display alert massages after signing in            -->
+                            <% if( loginMessage.length > 0 ) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= loginMessage %>
+                                </div>
+                                <% } %>
+                            
+
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" class="" id="" name="email">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Password</label>
+                                        <input type="password" class="form-control" class="" id="" name="password">
+                                    </div>
+
+
+                                    <button type="submit" id="" class="btn btn-default">Sign In</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /container -->
+        </section>
+
+
+
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <script src="handlebars.min.js"></script>
+        <script src="custom.js"></script>
+
+</body>
+
+</html>

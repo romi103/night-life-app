@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include partials/head %>
+</head>
+
+<body>
+
+    <% include partials/navbar %>
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="search-container col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+
+                        <h3>Sign up with email address here:</h3>
+
+
+                        <form action="/email-signup" method="post" class="form-horizontal col-xs-12 col-md-8 col-md-offset-2 email-forms">
+
+
+                            <!--            display sign up alert            -->
+                            <% if( signupAlertMessage.length > 0 ) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= signupAlertMessage %>
+                                </div>
+                                <% } %>
+
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" class="form-control" class="" id="" name="email">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Password</label>
+                                        <input type="password" class="form-control" class="" id="" name="password">
+                                    </div>
+
+                                    <button type="submit" id="" class="btn btn-default">Sign Up</button>
+                            
+                            <p>Already have an account? <a href="/email-signin">Sign In</a></p>
+    <p>Or go <a href="/">home</a>.</p>
+                            
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- /container -->
+        </section>
+
+
+
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <script src="handlebars.min.js"></script>
+        <script src="custom.js"></script>
+
+</body>
+
+</html>

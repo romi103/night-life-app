@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include partials/head %>
+</head>
+<body>
+
+    <!-- Static navbar -->
+       <% include partials/navbar %>
+    
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="search-container col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+                    
+                     <% if( signinMasaage.length > 0 ) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= signinMasaage %>
+                                </div>
+                                <% } %>
+                    
+                     <h3>Are you new to Night Life App?</h3>
+                    
+                                        
+
+                    <a href="email-signup" class="selectMethod">
+                        <i class="fa fa-envelope" aria-hidden="true"></i> Sign up with Email Address
+                    </a>
+                    
+                    <hr>
+                    
+                    <h3>Are you a returning camper?</h3>
+                    
+                    
+                    <a href="email-signin" class="selectMethod">
+                        <i class="fa fa-envelope" aria-hidden="true"></i> Sign 
+                        in with Email Address
+                    </a>
+                    
+                    <hr>
+                    
+                    <p>Or select otherway to get full access to the portal</p>
+                    
+                    
+                    <a href="login" class="selectMethod">
+                        <i class="fa fa-facebook-official" aria-hidden="true"></i> Facbook
+                    </a>
+                    
+                     <a href="login" class="selectMethod">
+                        <i class="fa fa-google-plus-official" aria-hidden="true"></i> Gmail Account
+                    </a>
+
+                    
+                </div>
+            </div>
+        </div>
+        <!-- /container -->
+    </section>
+
+
+
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <script src="handlebars.min.js"></script>
+        <script src="custom.js"></script>
+
+</body>
+
+</html>
