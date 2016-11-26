@@ -178,143 +178,102 @@ module.exports = function (app, passport) {
 
     app.post('/search', function (req, res) {
 
-
         var query = req.body.searchBox;
-
-        yelp.search({
-            term: 'bar pub restaurant',
-            location: query,
-            limit: 10
-        }).then(function (data) {
-            var content = JSON.parse(data);
-            var bisArrayRef = content.businesses;
-            var places = [];
-
-            //            ///////////////////////////
-            async.each(bisArrayRef, function (ele, callback) {
-
-                // Perform operation on file here.
-                var yelpId = ele.id;
-                var bar;
+        console.log(req.user);
+        //waterfall function to control async processes
+        async.waterfall([
+            /////// first fn
+    function (callback) {
 
 
-                //console.log(ele);
+                    yelp.search({
+                        term: 'bar pub restaurant',
+                        location: query,
+                        limit: 10
+                    }).then(function (data) {
+                        callback(null, data);
+                    });
 
-                Places.find({
-                    "placeId": yelpId
-                }).exec(function (err, atandant) {
-                    if (err) {
-                        console.error(err);
+
+
+
+    },
+            ////////////////////second fn
+    function (data, callback) {
+                    // arg1 now equals 'one' and arg2 now equals 'two'
+                    var content = JSON.parse(data);
+                    var bisArrayRef = content.businesses;
+                    var places = [];
+                    var fetchingIsFinished;
+                    var noUsers;
+
+                    // getting user's id 
+                    var userAuthenticated = req.isAuthenticated();
+                    if (userAuthenticated) {
+                        var userId = req.user_id;
                     }
 
 
-
-                    if (atandant.length > 0) {
-
-
-                        var noUsers = atandant[0].users.length;
-                    }
-                    bar = new BarRes(ele.name, ele.location.address1, ele.location.address2, ele.location.city, ele.location.zip_code, yelpId, ele.url, ele.image_url, ele.rating, noUsers);
-                    places.push(bar);
-                    console.log(bar);
-                    console.log('pub processed');
-                    callback();
+                    async.each(bisArrayRef, function (ele, callbackEAch) {
 
 
+                        var yelpId = ele.id;
+                        var bar;
+
+                        Places.find({
+                            "placeId": yelpId
+                        }).exec(function (err, atandant) {
+                            if (err) {
+                                console.error(err);
+                            }
+
+                            //number of user attending
+                            if (atandant.length > 0) {
+                                //                                        var usersArray = atandant[0].users;
+
+                                noUsers = atandant[0].users.length;
+                            } else {
+                                noUsers = 0;
+                            }
 
 
-                });
 
-                //            if (file.length > 32) {
-                //                console.log('This file name is too long');
-                //                callback('File name too long');
-                //            } else {
-                // Do work to process file here
+                            bar = new BarRes(ele.name, ele.location.address1, ele.location.address2, ele.location.city, ele.location.zip_code, yelpId, ele.url, ele.image_url, ele.rating, noUsers);
 
-                //        }
-            }, function (err) {
-                // if any of the file processing produced an error, err would equal that error
-                if (err) {
-                    // One of the iterations produced an error.
-                    // All processing will now stop.
-                    console.log('An error cccured');
-                } else {
-                    console.log('All pubs have been processed successfully');
-                }
+                            places.push(bar);
+                            console.log('pub processed');
+                            callbackEAch();
+                        });
+
+
+                    }, function (err) {
+                        // if any of the file processing produced an error, err would equal that error
+                        if (err) {
+                            // One of the iterations produced an error.
+                            // All processing will now stop.
+                            console.log('An error cccured');
+                        } else {
+                            fetchingIsFinished = true;
+                            console.log('All pubs have been processed successfully');
+                            if (fetchingIsFinished) {
+
+                                callback(null, places);
+                            }
+
+                        }
+                    });
+
+    }],
+            //finish callback 
+
+            function (err, places) {
+
+                var p = JSON.stringify(places);
+                console.log(places);
+                res.send(p);
             });
 
-            /////////////////////////////////////
-
-            //
-            //            bisArrayRef.forEach(function (ele) {
-            //               
-            //            var yelpId = ele.id;
-            //                 var bar;
-
-
-
-            //                
-            //                 var atandant = Places.find({
-            //            "placeId": yelpId
-            //        }).exec(function (err, atandant) {
-            //            if (err) {
-            //                console.error(err);
-            //            }
-            //            //var users = place.users;
-            //                     console.log(atandant);
-            //                     promise.resolve();
-            //            
-            //            
-            //            
-            //            
-            //        });
-            //                
-            //                
-
-
-
-
-
-
-
-            //        bar = new BarRes(ele.name, ele.location.address1, ele.location.address2, ele.location.city, ele.location.zip_code, yelpId, ele.url, ele.image_url, ele.rating);
-            //        places.push(bar);
-
-
-
-
-
-            //    });
-            var p = JSON.stringify(places);
-            console.log(p);
-            res.send(p);
-        }).then(function () {
-            console.log("second then");
-        }).catch(function (err) {
-            console.error(err);
-            res.status(400).send("An error occurred please search again.");
-        });
     });
-
-    //    function searchAttandants(id, promise) {
-    //
-    //
-    //
-    //        var places = Places.find({
-    //            "placeId": id
-    //        }).exec(function (err, place) {
-    //            if (err) {
-    //                console.error(err)
-    //            }
-    //            //var users = place.users;
-    //            console.log(place.users);
-    //            
-    //            return place.users;
-    //            promise.resolve();
-    //        });
-    //
-    //
-    //    }
 
     //place constructor to be send
     function BarRes(name, address1, address2, city, zip_code, id, url, image_url, rating, noUsers) {
@@ -330,27 +289,207 @@ module.exports = function (app, passport) {
             this.rating = rating
 
     }
+    //gives number of goers (if logged user is in the data base, deduc 1) 
+    function checkGoers() {
+        placeId, placeData, userId
+    } {
 
+    }
 
-    app.get('/go/:placeID', function (req, res) {
+    // going-to-button route 
+    app.get('/go/:placeId', function (req, res) {
 
         var userAuthenticated = req.isAuthenticated();
+        var placeId = req.params.placeId;
 
-        if (userAuthenticated) {
-            //check if already in database if not add to the data base and amend
-        }
-        //decides if the user is to be rediracted in order to signed in. true of false to be sent
-        var data = JSON.stringify({
-            isAuthenticated: userAuthenticated
+
+
+
+
+        //                    Places.find({
+        //                                    "placeId": placeId
+        //                                }).exec(function (err, place) {
+        //                                    if (err) {
+        //                                        console.error(err);
+        //                                    }
+        //                        
+        //                                    console.log(place);
+        //
+        //                    });
+
+
+
+        async.waterfall([
+    function (callback) {
+
+                if (userAuthenticated) {
+                    //check if already in database if not add to the data base and amend
+                    var userId = req.user._id;
+
+                    Places.findOne({
+                        'placeId': placeId
+                    }, function (err, place) {
+                        // if there are any errors, return the error
+                        if (err)
+                            throw err;
+
+                        var numberOfGoers;
+
+                        // check if theres already pub in the datebase
+                        if (place) {
+
+                            console.log("place exists");
+
+
+                            var arrayUsers = place.users;
+                          
+
+                            var search = arrayUsers.find(function (user) {
+                                return user == userId;
+                            })
+
+
+                            if (!search) {
+                                numberOfGoers = arrayUsers.length + 1;
+                                place.users.push(userId.toString());
+                                place.save(function (err) {
+                                    if (err)
+                                        throw err;
+                                    console.log("a new goer added")
+
+                                });
+
+                            } else {
+                                numberOfGoers = arrayUsers.length;
+                                console.log("user in databese")
+                            }
+
+                            //                arrayUsers.forEach(function(element) {
+                            //    console.log(typeof element);
+                        } else {
+
+                            // if there is no pub create one in datebase
+                            // create the user
+                            numberOfGoers = 1;
+                            var tempArrayUser = [];
+                            tempArrayUser.push(userId.toString());
+                            var newPlace = new Places();
+
+                            // 
+                            newPlace.placeId = placeId;
+                            newPlace.users = tempArrayUser;;
+                            // save the place
+                            newPlace.save(function (err) {
+                                if (err)
+                                    throw err;
+                                console.log("a new place added")
+
+
+                            });
+                        }
+                        callback(null, numberOfGoers);
+                    });
+
+                } else {
+                    //if not logged in sent no goers number, custom.js will will redirect to the sigin page
+                    callback(null, null);
+                }
+
+
+    }
+], function (err, numberOfGoers) {
+            if (err)
+                throw err;
+
+            var data = JSON.stringify({
+                isAuthenticated: userAuthenticated,
+                numberAtten: numberOfGoers,
+
+            });
+            res.contentType('application/json');
+            res.end(data);
+
+
+
+            console.log("Number of goers sent: " + numberOfGoers);
         });
-        res.contentType('application/json');
-        res.end(data);
+
+
+
+        //                    Places.findOne({ 'placeId' :  placeId }, function(err, place) {
+        //            // if there are any errors, return the error
+        //                if (err)
+        //                        throw err;
+        //
+        //            // check to see if theres already pub in the datebase
+        //            if (place) {
+        //                
+        //                console.log("place exists");
+        //                console.log(place);
+        //                
+        //                var arrayUsers = place.users;
+        //                
+        //                
+        //                
+        //                var search = arrayUsers.find(function(user){
+        //                    return user == userId;
+        //                })
+        //                
+        //                if (!search) {
+        //                    numberOfGoers = arrayUsers.length;
+        //                } else {
+        //                    numberOfGoers = arrayUsers.length - 1;
+        //                }
+        //              
+        //            } else {
+        //
+        //                // if there is no pub create one in datebase
+        //                // create the user
+        //                
+        //                var tempArrayUser = [];
+        //                tempArrayUser.push(userId);
+        //                var newPlace            = new Places();
+        //
+        //                // 
+        //                newPlace.placeId    = placeId;
+        //                newPlace.users = tempArrayUser;
+        //;
+        //                // save the place
+        //                newPlace.save(function(err) {
+        //                    if (err)
+        //                        throw err;
+        //                    console.log("a new place added")
+        //                    
+        //                });
+        //            }
+        //
+        //        });    
+
+
+
+
+
+
+
+        //decides if the user is to be rediracted in order to signed in. true of false to be sent
+
+        //                var data = JSON.stringify({
+        //                    isAuthenticated: userAuthenticated,
+        //                    numberAtten: numberOfGoers
+        //                });
+        //                res.contentType('application/json');
+        //                res.end(data);
 
 
         //        console.log(req.params.placeID);
         //        res.end();
 
     });
+
+
+
+
+
 
     function isLoggedIn(req, res, next) {
 

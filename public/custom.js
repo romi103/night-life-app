@@ -35,8 +35,8 @@ $(document).ready(function () {
             //attaching click handler the go button
             var goButton = document.getElementsByClassName("search-result-goButton");
             var goButtonId;
-            //console.log()
             
+            //adding event listener for goButton and if not logged in redirect
             Array.prototype.forEach.call(goButton, function (element) {
                 element.addEventListener("click", function () {
                   goButtonId = this.getAttribute("data-id");
@@ -48,6 +48,7 @@ $(document).ready(function () {
                         if (!data.isAuthenticated) {
                             window.location = "/signin";
                         }
+                        console.log(data.numberAtten);
                         
                     }).fail(function() {
     console.log( "error" );
