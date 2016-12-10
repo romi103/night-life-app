@@ -11,8 +11,6 @@ module.exports = function (app, passport) {
         app_secret: 'hHF77Tr3qr7FtUlH6Lxa93lGqGnHg62sBLIZX7VhHFcr9O37Jsbxa9AUr9dMGbPF'
     });
 
-
-
     app.get('/', function (req, res) {
         var userAuthenticated = req.isAuthenticated();
         console.log(req.user);
@@ -54,11 +52,8 @@ module.exports = function (app, passport) {
     });
 
 
-
-
     app.get('/email-signup', function (req, res) {
         var userAuthenticated = req.isAuthenticated();
-
 
         res.render('email-signup.ejs', {
             userLoggedIn: userAuthenticated,
@@ -66,8 +61,6 @@ module.exports = function (app, passport) {
             userDetails: req.user
         });
     });
-
-
 
     app.get('/email-signin', function (req, res) {
         var userAuthenticated = req.isAuthenticated();
@@ -129,52 +122,29 @@ module.exports = function (app, passport) {
     }));
 
 
-
     app.post('/email-signin', passport.authenticate('local-login', {
 
         successRedirect: '/', // redirect to the secure profile section
         failureRedirect: '/email-signin', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
+    
+    
+    // =====================================
+    // FACEBOOK ROUTES =====================
+    // =====================================
+    // route for facebook authentication and login
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
-    //show the login form
-    //        app.get('/email-signup', function (req, res) {
-    //    
-    //            // render the page and pass in any flash data if it exists
-    //            res.render('email-signup.ejs', {
-    //                message: req.flash('signupMessage')
-    //            });
-    //        });
-    //
-    //
-    //    // process the sign in form
-    //    app.post('/login', passport.authenticate('local-login', {
-    //        successRedirect: '/', // redirect to the secure profile section
-    //        failureRedirect: '/login', // redirect back to the signup page if there is an error
-    //        failureFlash: true // allow flash messages
-    //
-    //    }));
-    //    
-
-
-    app.post('/test', function (req, res) {
-        var bisId = req.body.bisId;
-        var user = req.body.user;
-
-
-        var newPlaces = new Places();
-        newPlaces.placeId = bisId;
-        newPlaces.users = user;
-
-
-        newPlaces.save(function (err, newPlaces, numAffected) {
-            if (err) {
-                console.log(err);
-            }
-        });
-
-
-    });
+    // handle the callback after facebook has authenticated the user
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', {
+            successRedirect : '/',
+            failureRedirect : '/email-signin'
+        }));
+    
+    
+    
 
     app.post('/search', function (req, res) {
 
@@ -185,7 +155,6 @@ module.exports = function (app, passport) {
             /////// first fn
     function (callback) {
 
-
                     yelp.search({
                         term: 'bar pub restaurant',
                         location: query,
@@ -193,14 +162,10 @@ module.exports = function (app, passport) {
                     }).then(function (data) {
                         callback(null, data);
                     });
-
-
-
-
     },
-            ////////////////////second fn
+          
     function (data, callback) {
-                    // arg1 now equals 'one' and arg2 now equals 'two'
+
                     var content = JSON.parse(data);
                     var bisArrayRef = content.businesses;
                     var places = [];
@@ -213,9 +178,7 @@ module.exports = function (app, passport) {
                         var userId = req.user_id;
                     }
 
-
                     async.each(bisArrayRef, function (ele, callbackEAch) {
-
 
                         var yelpId = ele.id;
                         var bar;
@@ -229,14 +192,11 @@ module.exports = function (app, passport) {
 
                             //number of user attending
                             if (atandant.length > 0) {
-                                //                                        var usersArray = atandant[0].users;
 
                                 noUsers = atandant[0].users.length;
                             } else {
                                 noUsers = 0;
                             }
-
-
 
                             bar = new BarRes(ele.name, ele.location.address1, ele.location.address2, ele.location.city, ele.location.zip_code, yelpId, ele.url, ele.image_url, ele.rating, noUsers);
 
@@ -259,20 +219,16 @@ module.exports = function (app, passport) {
 
                                 callback(null, places);
                             }
-
                         }
                     });
-
     }],
             //finish callback 
-
             function (err, places) {
 
                 var p = JSON.stringify(places);
                 console.log(places);
                 res.send(p);
             });
-
     });
 
     //place constructor to be send
@@ -289,35 +245,12 @@ module.exports = function (app, passport) {
             this.rating = rating
 
     }
-    //gives number of goers (if logged user is in the data base, deduc 1) 
-    function checkGoers() {
-        placeId, placeData, userId
-    } {
-
-    }
 
     // going-to-button route 
     app.get('/go/:placeId', function (req, res) {
 
         var userAuthenticated = req.isAuthenticated();
         var placeId = req.params.placeId;
-
-
-
-
-
-        //                    Places.find({
-        //                                    "placeId": placeId
-        //                                }).exec(function (err, place) {
-        //                                    if (err) {
-        //                                        console.error(err);
-        //                                    }
-        //                        
-        //                                    console.log(place);
-        //
-        //                    });
-
-
 
         async.waterfall([
     function (callback) {
@@ -339,15 +272,10 @@ module.exports = function (app, passport) {
                         if (place) {
 
                             console.log("place exists");
-
-
                             var arrayUsers = place.users;
-                          
-
                             var search = arrayUsers.find(function (user) {
                                 return user == userId;
                             })
-
 
                             if (!search) {
                                 numberOfGoers = arrayUsers.length + 1;
@@ -356,16 +284,12 @@ module.exports = function (app, passport) {
                                     if (err)
                                         throw err;
                                     console.log("a new goer added")
-
                                 });
 
                             } else {
                                 numberOfGoers = arrayUsers.length;
                                 console.log("user in databese")
                             }
-
-                            //                arrayUsers.forEach(function(element) {
-                            //    console.log(typeof element);
                         } else {
 
                             // if there is no pub create one in datebase
@@ -375,7 +299,6 @@ module.exports = function (app, passport) {
                             tempArrayUser.push(userId.toString());
                             var newPlace = new Places();
 
-                            // 
                             newPlace.placeId = placeId;
                             newPlace.users = tempArrayUser;;
                             // save the place
@@ -383,8 +306,6 @@ module.exports = function (app, passport) {
                                 if (err)
                                     throw err;
                                 console.log("a new place added")
-
-
                             });
                         }
                         callback(null, numberOfGoers);
@@ -394,8 +315,6 @@ module.exports = function (app, passport) {
                     //if not logged in sent no goers number, custom.js will will redirect to the sigin page
                     callback(null, null);
                 }
-
-
     }
 ], function (err, numberOfGoers) {
             if (err)
@@ -408,88 +327,9 @@ module.exports = function (app, passport) {
             });
             res.contentType('application/json');
             res.end(data);
-
-
-
             console.log("Number of goers sent: " + numberOfGoers);
         });
-
-
-
-        //                    Places.findOne({ 'placeId' :  placeId }, function(err, place) {
-        //            // if there are any errors, return the error
-        //                if (err)
-        //                        throw err;
-        //
-        //            // check to see if theres already pub in the datebase
-        //            if (place) {
-        //                
-        //                console.log("place exists");
-        //                console.log(place);
-        //                
-        //                var arrayUsers = place.users;
-        //                
-        //                
-        //                
-        //                var search = arrayUsers.find(function(user){
-        //                    return user == userId;
-        //                })
-        //                
-        //                if (!search) {
-        //                    numberOfGoers = arrayUsers.length;
-        //                } else {
-        //                    numberOfGoers = arrayUsers.length - 1;
-        //                }
-        //              
-        //            } else {
-        //
-        //                // if there is no pub create one in datebase
-        //                // create the user
-        //                
-        //                var tempArrayUser = [];
-        //                tempArrayUser.push(userId);
-        //                var newPlace            = new Places();
-        //
-        //                // 
-        //                newPlace.placeId    = placeId;
-        //                newPlace.users = tempArrayUser;
-        //;
-        //                // save the place
-        //                newPlace.save(function(err) {
-        //                    if (err)
-        //                        throw err;
-        //                    console.log("a new place added")
-        //                    
-        //                });
-        //            }
-        //
-        //        });    
-
-
-
-
-
-
-
-        //decides if the user is to be rediracted in order to signed in. true of false to be sent
-
-        //                var data = JSON.stringify({
-        //                    isAuthenticated: userAuthenticated,
-        //                    numberAtten: numberOfGoers
-        //                });
-        //                res.contentType('application/json');
-        //                res.end(data);
-
-
-        //        console.log(req.params.placeID);
-        //        res.end();
-
     });
-
-
-
-
-
 
     function isLoggedIn(req, res, next) {
 
@@ -500,12 +340,7 @@ module.exports = function (app, passport) {
         } else {
             req.flash('signinMasaage', "Please signup or signin if you want let know others where you are going.");
             res.redirect('/signin');
-
         }
-
-
-        // if they aren't redirect them to the home page
-
     }
 
 
@@ -542,7 +377,6 @@ module.exports = function (app, passport) {
         req.logout();
         req.flash('logout', 'You have been logged out!');
         res.redirect('/');
-
 
     });
 };

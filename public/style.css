@@ -92,11 +92,17 @@ body {
     border: 3px solid #f57f17;
     border-radius: 10px;
     background-color: white; }
+/*
   #search-results .results:nth-child(odd) {
     background-color: #f57f17; }
+*/
   #search-results .results {
     padding: 11px;
     border-radius: 10px; }
+
+ #search-results .results:hover {
+    background-color: #f57f17; }
+
 
 .search-img {
   width: 100%;
@@ -208,6 +214,15 @@ body {
 
 .yelp-5 {
   background-position: 0px -576px; }
+
+.userIcon {
+vertical-align: middle;
+}
+
+.userEmail {
+    font-style: italic;
+    font-weight: 700
+}
 
 @keyframes loading {
   0% {

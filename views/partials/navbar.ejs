@@ -13,8 +13,7 @@
             <form class="navbar-form navbar-right" role="search">
 
                 <% if(userLoggedIn) { %>
-                
-                <span>Logged in as <%= userDetails.local.email %> </span>  <a href="/logout" class="btn btn-default"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
+                <i class="fa fa-user fa-2x userIcon" aria-hidden="true"></i> <span> Logged in as <span class="userEmail"><%= userDetails.local.email || userDetails.facebook.email %></span></span>  <a href="/logout" class="btn btn-default"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>
 
                     <% } else {%>
                     <a href="/signin" class="btn btn-default"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
