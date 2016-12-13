@@ -15,6 +15,15 @@
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
     <link href="font-awesome.min.css" rel="stylesheet">
+<script>
+    if (sessionStorage.getItem("query") && window.location.pathname == "/") {
+
+                    
+        window.location = "/search" + sessionStorage.getItem("query");
+        sessionStorage.clear();
+                    }
+    
+    </script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

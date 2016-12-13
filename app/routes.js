@@ -146,13 +146,16 @@ module.exports = function (app, passport) {
     
     
 
-    app.post('/search', function (req, res) {
-
-        var query = req.body.searchBox;
+    app.get('/search', function (req, res) {
+         var userAuthenticated = req.isAuthenticated();
+        // render the page and pass in any flash data if it exists
+        var query = req.query.searchBox;
+        var userAuthenticated = req.isAuthenticated();
+        
         console.log(req.user);
         //waterfall function to control async processes
         async.waterfall([
-            /////// first fn
+            ///// first fn
     function (callback) {
 
                     yelp.search({
@@ -225,9 +228,14 @@ module.exports = function (app, passport) {
             //finish callback 
             function (err, places) {
 
-                var p = JSON.stringify(places);
-                console.log(places);
-                res.send(p);
+//                var p = JSON.stringify(places);
+//                console.log(typeof p);
+                 res.render('index.ejs', {
+            userLoggedIn: userAuthenticated,
+            userDetails: req.user,
+            query: query,
+            places: places
+        });
             });
     });
 
