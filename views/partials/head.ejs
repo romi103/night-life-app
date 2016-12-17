@@ -21,6 +21,12 @@
         window.location = "/search" + sessionStorage.getItem("query");
         sessionStorage.clear();
     }
+    
+   //facebook oauth - removing facebook hash 
+    if (window.location.hash && window.location.hash == '#_=_') {
+        window.location.hash = '';
+    }
+
 </script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

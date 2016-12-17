@@ -14,6 +14,21 @@
             <div class="container">
                 <div class="row">
                     <div class="search-container col-md-8 col-md-offset-2 col-xs-10 col-xs-offset-1">
+                        
+                        <% if( loginMessage.length > 0 ) { %>
+                                <div class="alert alert-success" role="alert">
+                                    <%= loginMessage %>
+                                    <script>
+                                    window.setTimeout(function(){
+                                        $(".alert").fadeOut()
+                                    }, 1500);
+                                    
+                                    </script>
+                                </div>
+                                <% } %>
+                        
+                        
+                        
                         <div class="col-md-10 col-md-offset-1 col-xs-12">
                             <h3 id="search-description">Serach nearest bar or restaurant and let know other pepole you are there.</h3>
                             <form class="form-horizontal col-xs-12" id="search-form" action="/search" method="GET">
@@ -30,6 +45,7 @@
                                 <span></span>
                             </div>
                         </div>
+                    
                         <div class="col-xs-12" id="search-results">
                             <% if( typeof places !== "undefined") { %>
 
@@ -37,23 +53,19 @@
                                     <div class="row results">
 
                                         <div class="col-xs-12 col-md-3">
-                                            <a href="<%= place.url %>" target="_blank"><img class="search-img" <% if( place.image_url) { %> src="
-                                                <%= place.image_url  %>"
-                                                    <% } else { %> src="256px-No_image_available.png"
-                                                        <% } %>></a>
+                                            <a href="<%= place.url %>" target="_blank"><img class="search-img" <% if(place.image_url) { %> src="<%= place.image_url  %>"<% } else { %> src="256px-No_image_available.png"<% } %>></a>
                                         </div>
 
                                         <div class="search-details col-xs-12 col-md-9">
 
                                             <h4><a href="<%= place.url %>" target="_blank"><%= place.name %></a><span class="yelp-rating yelp-<%= place.rating %>"></span></h4>
-                                            <p>
-                                                <%= place.address1 %>
-                                                    <%= place.address2 %>
+                                            <p><%= place.address1 %>
+                                <%= place.address2 %>
                                                         <br />
                                                         <%= place.city %>,
                                                             <%= place.zip_code %>
                                             </p>
-                                            <button class="search-result-goButton" data-id="<%= place.id %>"><span id="numberAttendants"><%= place.atendants %></span> ppl going there</button>
+                                            <button class="search-result-goButton" data-id="<%= place.id %>"><span id="numberAttendants"><%= place.atendants %></span> going</button>
                                         </div>
                                     </div>
                                     <hr />

@@ -1,9 +1,14 @@
+var clientIDAcebook = process.env.CLIENT_ID_FACBOOK;
+var clientSecretFacebook = process.env.CLIENT_SECRET_FACBOOK;
+var callbackURLFacbook = process.env.CALLBACK_FACBOOK;
+
+
 module.exports = {
 
     'facebookAuth' : {
-        'clientID'      : '1657531017878504', // your App ID
-        'clientSecret'  : '19e7b298efd31ed5a24f541f3c370798', // your App Secret
-        'callbackURL'   : 'http://localhost:5000/auth/facebook/callback'
+        'clientID'      : clientIDAcebook, // your App ID
+        'clientSecret'  : clientSecretFacebook, // your App Secret
+        'callbackURL'   : callbackURLFacbook
     }
 //
 //    'twitterAuth' : {

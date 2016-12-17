@@ -1,3 +1,8 @@
+var sanitizer = require('sanitizer');
+
+var link = process.env.MONGODB_URI;
+var yelp_app_id = process.env.YELP_APP_ID;
+var yelp_app_secret = process.env.YELP_APP_SECRET; 
 // app/routes.js
 module.exports = function (app, passport) {
     var async = require('async');
@@ -7,33 +12,19 @@ module.exports = function (app, passport) {
     var Yelp = require('yelp-api-v3');
 
     var yelp = new Yelp({
-        app_id: 'XMfTt2ztl7TRQZccI1EjQg',
-        app_secret: 'hHF77Tr3qr7FtUlH6Lxa93lGqGnHg62sBLIZX7VhHFcr9O37Jsbxa9AUr9dMGbPF'
+        app_id: yelp_app_id,
+        app_secret: yelp_app_secret
     });
 
     app.get('/', function (req, res) {
         var userAuthenticated = req.isAuthenticated();
-        console.log(req.user);
         res.render('index.ejs', {
             userLoggedIn: userAuthenticated,
-            userDetails: req.user
+            userDetails: req.user,
+            loginMessage: req.flash('loginMessage')
         });
 
     });
-    //    app.get('/', getPolls, getUserPolls, function (req, res) {
-    //
-    //        var userLoggedIn = req.isAuthenticated();
-    //        console.log(res.userPolls);
-    //        res.render('template.ejs', {
-    //
-    //            poll: res.polls,
-    //            userLogged: userLoggedIn,
-    //            userPolls: res.userPolls
-    //        });
-    //
-    //    });
-    //
-
 
     // =====================================
     // LOGIN ===============================
@@ -74,30 +65,6 @@ module.exports = function (app, passport) {
         });
     });
 
-    //
-    //    app.get('/getpoll/:pollId', function (req, res) {
-    //
-    //        var polls = Polls.find({
-    //            "_id": req.params.pollId
-    //        }).exec(function (err, polls) {
-    //            res.send(polls);
-    //        });
-    //
-    //    });
-
-
-
-    //    //getting polls' info (labels) to be voted for
-    //    app.get('/vote/:pollId', function (req, res) {
-    //
-    //        var polls = Polls.find({
-    //            "_id": req.params.pollId
-    //        }).exec(function (err, polls) {
-    //            res.send(polls);
-    //        });
-    //
-    //    });
-
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
@@ -128,31 +95,31 @@ module.exports = function (app, passport) {
         failureRedirect: '/email-signin', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
-    
-    
+
+
     // =====================================
     // FACEBOOK ROUTES =====================
     // =====================================
     // route for facebook authentication and login
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/auth/facebook', passport.authenticate('facebook', {
+        scope: 'email'
+    }));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect : '/',
-            failureRedirect : '/email-signin'
+            successRedirect: '/',
+            failureRedirect: '/email-signin'
         }));
-    
-    
-    
+
+
+
 
     app.get('/search', function (req, res) {
-         var userAuthenticated = req.isAuthenticated();
-        // render the page and pass in any flash data if it exists
-        var query = req.query.searchBox;
         var userAuthenticated = req.isAuthenticated();
-        
-        console.log(req.user);
+        // render the page and pass in any flash data if it exists
+        var query = sanitizer.escape(req.query.searchBox);
+        var userAuthenticated = req.isAuthenticated();
         //waterfall function to control async processes
         async.waterfall([
             ///// first fn
@@ -166,7 +133,7 @@ module.exports = function (app, passport) {
                         callback(null, data);
                     });
     },
-          
+
     function (data, callback) {
 
                     var content = JSON.parse(data);
@@ -227,15 +194,13 @@ module.exports = function (app, passport) {
     }],
             //finish callback 
             function (err, places) {
-
-//                var p = JSON.stringify(places);
-//                console.log(typeof p);
-                 res.render('index.ejs', {
-            userLoggedIn: userAuthenticated,
-            userDetails: req.user,
-            query: query,
-            places: places
-        });
+                res.render('index.ejs', {
+                    userLoggedIn: userAuthenticated,
+                    userDetails: req.user,
+                    query: query,
+                    places: places,
+                    loginMessage: req.flash('loginMessage')
+                });
             });
     });
 
@@ -351,36 +316,6 @@ module.exports = function (app, passport) {
         }
     }
 
-
-
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
-    //    app.get('/signup', function (req, res) {
-    //
-    //        // render the page and pass in any flash data if it exists
-    //        res.render('signup.ejs', {
-    //            message: req.flash('signupMessage')
-    //        });
-    //    });
-
-
-
-    // =====================================
-    // PROFILE SECTION =====================
-    // =====================================
-    // we will want this protected so you have to be logged in to visit
-    // we will use route middleware to verify this (the isLoggedIn function)
-    //    app.get('/profile', isLoggedIn, function (req, res) {
-    //        res.render('profile.ejs', {
-    //            user: req.user // get the user out of session and pass to template
-    //        });
-    //    });
-
-    // =====================================
-    // LOGOUT ==============================
-    // =====================================
     app.get('/logout', function (req, res) {
         req.logout();
         req.flash('logout', 'You have been logged out!');
