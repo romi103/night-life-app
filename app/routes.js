@@ -1,10 +1,10 @@
 var sanitizer = require('sanitizer');
 
 
-//var yelp_app_id = process.env.YELP_APP_ID;
-var yelp_app_id = "XMfTt2ztl7TRQZccI1EjQg";
-//var yelp_app_secret = process.env.YELP_APP_SECRET; 
-var yelp_app_secret = 'hHF77Tr3qr7FtUlH6Lxa93lGqGnHg62sBLIZX7VhHFcr9O37Jsbxa9AUr9dMGbPF'; 
+var yelp_app_id = process.env.YELP_APP_ID;
+
+var yelp_app_secret = process.env.YELP_APP_SECRET; 
+
 // app/routes.js
 module.exports = function (app, passport) {
     var async = require('async');
