@@ -1,8 +1,10 @@
 var sanitizer = require('sanitizer');
 
-var link = process.env.MONGODB_URI;
-var yelp_app_id = process.env.YELP_APP_ID;
-var yelp_app_secret = process.env.YELP_APP_SECRET; 
+
+//var yelp_app_id = process.env.YELP_APP_ID;
+var yelp_app_id = "XMfTt2ztl7TRQZccI1EjQg";
+//var yelp_app_secret = process.env.YELP_APP_SECRET; 
+var yelp_app_secret = 'hHF77Tr3qr7FtUlH6Lxa93lGqGnHg62sBLIZX7VhHFcr9O37Jsbxa9AUr9dMGbPF'; 
 // app/routes.js
 module.exports = function (app, passport) {
     var async = require('async');
@@ -260,8 +262,17 @@ module.exports = function (app, passport) {
                                 });
 
                             } else {
-                                numberOfGoers = arrayUsers.length;
-                                console.log("user in databese")
+                                var index = arrayUsers.indexOf(userId);
+                                numberOfGoers = arrayUsers.length - 1;
+                                place.users.splice(index, 1);
+                                place.save(function (err) {
+                                    if (err)
+                                        throw err;
+                                    console.log("user removed")
+                                });
+                                
+                                
+                                
                             }
                         } else {
 

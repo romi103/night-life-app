@@ -32,9 +32,7 @@
                                     <h3 id="search-description">Serach nearest bar or restaurant and let know other pepole you are there.</h3>
                                     <form class="form-horizontal col-xs-12" id="search-form" action="/search" method="GET">
                                         <div class="form-group" onsubmit="return searchBox.value!=''">
-                                            <input type="text" class="form-control" id="search-input" placeholder="Where are you?" name="searchBox" <% if(typeof query !=="undefined" ) { %> value="
-                                            <%= query %>"
-                                                <% } %>>
+                                            <input type="text" class="form-control" id="search-input" placeholder="Where are you?" name="searchBox" <% if(typeof query !=="undefined" ) { %> value="<%= query %>"<% } %>>
                                         </div>
                                         <button type="submit" id="search-button" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
                                     </form>

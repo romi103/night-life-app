@@ -102,7 +102,9 @@ body {
 
  #search-results .results:hover {
     background-color: #f57f17; }
-
+.search-details h4 a {
+    margin-right: 20px;
+}
 
 .search-img {
   width: 100%;
@@ -183,7 +185,7 @@ body {
   vertical-align: middle;
   height: 18px;
   width: 99px;
-  margin-left: 20px; }
+ }
 
 .yelp-0 {
   background-position: 0px -360px; }
